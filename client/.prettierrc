@@ -1,0 +1,22 @@
+{
+  "semi": true,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": "**/*.ts",
+      "options": {
+        "parser": "typescript"
+      }
+    },
+    {
+      "files": "**/styles.ts",
+      "options": {
+        "printWidth": 200,
+        "parser": "typescript"
+      }
+    }
+  ]
+}
