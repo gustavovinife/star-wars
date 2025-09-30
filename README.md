@@ -159,9 +159,7 @@ The application implements a **Redis-based caching layer** to optimize API perfo
 - **Laravel 12** - PHP framework
 - **PHP 8.2** - Modern PHP features
 - **Redis** - Caching and queue backend
-- **SQLite** - Lightweight database
 - **PHPUnit** - Unit testing framework
-- **Laravel Pint** - Code style fixer
 
 ## 🐳 Docker Setup
 
