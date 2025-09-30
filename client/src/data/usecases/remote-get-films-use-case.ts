@@ -1,5 +1,6 @@
 import type { IFilm } from "../../domain/entities/films";
 import type { IGetFilmsUseCase } from "../../domain/usecases/get-films-use-case";
+import { extractIdFromUrl } from "../../utils/url";
 
 export class RemoteGetFilmsUseCase implements IGetFilmsUseCase {
   private readonly url: string;
@@ -13,7 +14,7 @@ export class RemoteGetFilmsUseCase implements IGetFilmsUseCase {
 
     const data = await response.json();
     return data.results.map((item: any) => ({
-      id: item.title + Math.random().toString(36).substring(2, 15),
+      id: extractIdFromUrl(item.url),
       title: item.title,
       description: item.opening_crawl,
       characters: item.characters,

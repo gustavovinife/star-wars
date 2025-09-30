@@ -7,11 +7,26 @@ import type { IPeople } from "../../domain/entities/people";
 import type { IFilm } from "../../domain/entities/films";
 
 const mockNavigate = vi.fn();
-const mockUseLocation = vi.fn();
+const mockUseParams = vi.fn();
+const mockGetSinglePerson = vi.fn();
+const mockGetSingleFilm = vi.fn();
+
+let mockUseStarWarsReturn = {
+  singlePerson: null as IPeople | null,
+  singleFilm: null as IFilm | null,
+  loading: false,
+  error: null as string | null,
+  getSinglePerson: mockGetSinglePerson,
+  getSingleFilm: mockGetSingleFilm,
+};
 
 vi.mock("react-router", () => ({
   useNavigate: () => mockNavigate,
-  useLocation: () => mockUseLocation(),
+  useParams: () => mockUseParams(),
+}));
+
+vi.mock("../../hooks/useStarWars", () => ({
+  useStarWars: () => mockUseStarWarsReturn,
 }));
 
 const makeSut = () => {
@@ -27,36 +42,21 @@ describe("DetailsPage", () => {
     vi.clearAllMocks();
   });
 
-  describe("No data state", () => {
-    it("should show error message when no data is provided", () => {
-      mockUseLocation.mockReturnValue({
-        state: null,
-      });
+  describe("Loading state", () => {
+    it("should show loading message when loading is true", () => {
+      mockUseParams.mockReturnValue({ type: "people", id: "1" });
+      mockUseStarWarsReturn = {
+        singlePerson: null,
+        singleFilm: null,
+        loading: true,
+        error: null,
+        getSinglePerson: mockGetSinglePerson,
+        getSingleFilm: mockGetSingleFilm,
+      };
 
       makeSut();
 
-      expect(screen.getByText("No Data Available")).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          "Please navigate from the search results to view details."
-        )
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: "Back To Search" })
-      ).toBeInTheDocument();
-    });
-
-    it("should navigate back to home when back button is clicked", () => {
-      mockUseLocation.mockReturnValue({
-        state: null,
-      });
-
-      makeSut();
-
-      const backButton = screen.getByRole("button", { name: "Back To Search" });
-      fireEvent.click(backButton);
-
-      expect(mockNavigate).toHaveBeenCalledWith("/");
+      expect(screen.getByText("Loading...")).toBeInTheDocument();
     });
   });
 
@@ -72,12 +72,15 @@ describe("DetailsPage", () => {
     };
 
     beforeEach(() => {
-      mockUseLocation.mockReturnValue({
-        state: {
-          data: mockFilm,
-          type: "films",
-        },
-      });
+      mockUseParams.mockReturnValue({ type: "films", id: "1" });
+      mockUseStarWarsReturn = {
+        singlePerson: null,
+        singleFilm: mockFilm,
+        loading: false,
+        error: null,
+        getSinglePerson: mockGetSinglePerson,
+        getSingleFilm: mockGetSingleFilm,
+      };
     });
 
     it("should display film details correctly", () => {
@@ -91,22 +94,13 @@ describe("DetailsPage", () => {
       expect(screen.getByText("Characters:")).toBeInTheDocument();
     });
 
-    it("should display character links", () => {
-      makeSut();
-
-      expect(screen.getByText("Character 1")).toBeInTheDocument();
-      expect(screen.getByText("Character 2")).toBeInTheDocument();
-
-      const characterLinks = screen.getAllByRole("link");
-      expect(characterLinks).toHaveLength(2);
-    });
-
-    it("should navigate back when back button is clicked", () => {
+    it("should have back to search button", () => {
       makeSut();
 
       const backButton = screen.getByRole("button", { name: "Back To Search" });
-      fireEvent.click(backButton);
+      expect(backButton).toBeInTheDocument();
 
+      fireEvent.click(backButton);
       expect(mockNavigate).toHaveBeenCalledWith("/");
     });
   });
@@ -128,12 +122,15 @@ describe("DetailsPage", () => {
     };
 
     beforeEach(() => {
-      mockUseLocation.mockReturnValue({
-        state: {
-          data: mockPerson,
-          type: "people",
-        },
-      });
+      mockUseParams.mockReturnValue({ type: "people", id: "1" });
+      mockUseStarWarsReturn = {
+        singlePerson: mockPerson,
+        singleFilm: null,
+        loading: false,
+        error: null,
+        getSinglePerson: mockGetSinglePerson,
+        getSingleFilm: mockGetSingleFilm,
+      };
     });
 
     it("should display people details correctly", () => {
@@ -150,22 +147,13 @@ describe("DetailsPage", () => {
       expect(screen.getByText("Movies:")).toBeInTheDocument();
     });
 
-    it("should display movie links", () => {
-      makeSut();
-
-      expect(screen.getByText("Movie 1")).toBeInTheDocument();
-      expect(screen.getByText("Movie 2")).toBeInTheDocument();
-
-      const movieLinks = screen.getAllByRole("link");
-      expect(movieLinks).toHaveLength(2);
-    });
-
-    it("should navigate back when back button is clicked", () => {
+    it("should have back to search button", () => {
       makeSut();
 
       const backButton = screen.getByRole("button", { name: "Back To Search" });
-      fireEvent.click(backButton);
+      expect(backButton).toBeInTheDocument();
 
+      fireEvent.click(backButton);
       expect(mockNavigate).toHaveBeenCalledWith("/");
     });
   });

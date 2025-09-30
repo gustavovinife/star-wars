@@ -27,6 +27,7 @@ describe("RemoteGetFilmsUseCase", () => {
           title: "A New Hope",
           opening_crawl: "It is a period of civil war...",
           characters: ["character1", "character2"],
+          url: "https://swapi.dev/api/films/4/",
         },
       ],
     };
@@ -42,7 +43,7 @@ describe("RemoteGetFilmsUseCase", () => {
     expect(result[0].title).toBe("A New Hope");
     expect(result[0].description).toBe("It is a period of civil war...");
     expect(result[0].characters).toEqual(["character1", "character2"]);
-    expect(result[0].id).toMatch(/^A New Hope[a-z0-9]+$/);
+    expect(result[0].id).toBe("4");
   });
 
   it("should handle fetch errors", async () => {

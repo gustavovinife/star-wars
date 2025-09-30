@@ -37,4 +37,26 @@ class SwapiController extends Controller
 
         return response()->json($data);
     }
+
+    public function singlePerson(string $id)
+    {
+        $data = $this->swapi->fetchWithCache('people/' . $id, []);
+
+        if (!$data) {
+            return response()->json(['error' => 'Person not found'], 404);
+        }
+
+        return response()->json($data);
+    }
+
+    public function singleFilm(string $id)
+    {
+        $data = $this->swapi->fetchWithCache('films/' . $id, []);
+
+        if (!$data) {
+            return response()->json(['error' => 'Film not found'], 404);
+        }
+
+        return response()->json($data);
+    }
 }

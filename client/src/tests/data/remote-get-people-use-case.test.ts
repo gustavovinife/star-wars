@@ -18,15 +18,15 @@ describe("RemoteGetPeopleUseCase", () => {
     const mockApiResponse = {
       results: [
         {
-          id: "1",
           name: "Luke Skywalker",
           films: ["film1", "film2"],
-          height: 172,
-          mass: 77,
+          height: "172",
+          mass: "77",
           birth_year: "19BBY",
           gender: "male",
           eye_color: "blue",
           hair_color: "blond",
+          url: "https://swapi.dev/api/people/1/",
         },
       ],
     };

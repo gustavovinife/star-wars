@@ -10,8 +10,10 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'swapi'], function () {
     Route::get('/people', [SwapiController::class, 'people']);
+    Route::get('/people/{id}', [SwapiController::class, 'singlePerson']);
     Route::get('/planets', [SwapiController::class, 'planets']);
     Route::get('/films', [SwapiController::class, 'films']);
+    Route::get('/films/{id}', [SwapiController::class, 'singleFilm']);
 });
 
 Route::group(['prefix' => 'statistics'], function () {

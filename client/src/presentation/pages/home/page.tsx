@@ -17,7 +17,7 @@ export const HomePage = () => {
   }, [searchType]);
 
   const handleViewDetails = (type: "people" | "films", data: any) => {
-    navigate(`/details/${type}/${data.id}`, { state: { data, type } });
+    navigate(`/details/${type}/${data.id}`);
   };
 
   function handleSubmit() {

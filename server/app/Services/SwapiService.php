@@ -23,7 +23,10 @@ class SwapiService
         $cacheKey = CacheHelper::generateKey($endpoint, $params);
         $statsKey = CacheHelper::generateStatsKey($endpoint, $params);
 
-        $this->statistics->trackQuery($statsKey);
+        // Only track statistics for search queries (when statsKey is not null)
+        if ($statsKey !== null) {
+            $this->statistics->trackQuery($statsKey);
+        }
 
         $cachedData = Cache::get($cacheKey);
         if ($cachedData) {

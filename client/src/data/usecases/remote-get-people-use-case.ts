@@ -1,5 +1,6 @@
 import type { IPeople } from "../../domain/entities/people";
 import type { IGetPeopleUseCase } from "../../domain/usecases/get-people-use-case";
+import { extractIdFromUrl } from "../../utils/url";
 
 export class RemoteGetPeopleUseCase implements IGetPeopleUseCase {
   private readonly url: string;
@@ -13,7 +14,7 @@ export class RemoteGetPeopleUseCase implements IGetPeopleUseCase {
 
     const data = await response.json();
     return data.results.map((item: any) => ({
-      id: item.name + Math.random().toString(36).substring(2, 15),
+      id: extractIdFromUrl(item.url),
       name: item.name,
       films: item.films,
       height: parseInt(item.height, 10),
